@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import pkgEnum.ePuzzleViolation;
+
 public class LatinSquareTest {
 
 	@Test
@@ -145,5 +147,14 @@ public class LatinSquareTest {
 		LatinSquare LS = new LatinSquare(MySquare);
 		
 		assertFalse(LS.isLatinSquare());
+	}
+	
+	@Test
+	public void ePuzzleViolationTest()
+	{
+		for (ePuzzleViolation ePV: ePuzzleViolation.values())
+		{
+			System.out.println(ePV);
+		}
 	}
 }

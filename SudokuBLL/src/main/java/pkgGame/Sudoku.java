@@ -1,6 +1,8 @@
 package pkgGame;
 
+import pkgEnum.ePuzzleViolation;
 import pkgHelper.LatinSquare;
+import pkgHelper.PuzzleViolation;
 
 /**
  * Sudoku - This class extends LatinSquare, adding methods, constructor to
@@ -141,8 +143,9 @@ public class Sudoku extends LatinSquare {
 
 		int[] reg = new int[super.getLatinSquare().length];
 
-		int j = (r % iSqrtSize) * iSqrtSize;
+
 		int i = (r / iSqrtSize) * iSqrtSize;
+		int j = (r % iSqrtSize) * iSqrtSize;		
 		int jMax = j + iSqrtSize;
 		int iMax = i + iSqrtSize;
 		int iCnt = 0;
@@ -166,11 +169,11 @@ public class Sudoku extends LatinSquare {
 		
 		for (int k = 0; k < this.getPuzzle().length; k++) {
 			if (super.hasDuplicates(getRegion(k))) {
-				return true;
+				super.AddPuzzleViolation(new PuzzleViolation(ePuzzleViolation.DupRegion,k));
 			}
 		}
 	
-		return false;
+		return (super.getPV().size() > 0);
 	}
 
 	/**
@@ -187,12 +190,15 @@ public class Sudoku extends LatinSquare {
 	 */
 	public boolean isPartialSudoku() {
 
-		this.setbIgnoreZero(true);
+		super.setbIgnoreZero(true);
+		
+		super.ClearPuzzleViolation();
 		
 		if (hasDuplicates())
 			return false;
 
 		if (!ContainsZero()) {
+			super.AddPuzzleViolation(new PuzzleViolation(ePuzzleViolation.MissingZero, -1));
 			return false;
 		}
 		return true;
@@ -211,6 +217,8 @@ public class Sudoku extends LatinSquare {
 	public boolean isSudoku() {
 
 		this.setbIgnoreZero(false);
+		
+		super.ClearPuzzleViolation();
 		
 		if (hasDuplicates())
 			return false;
@@ -247,6 +255,20 @@ public class Sudoku extends LatinSquare {
 	 * @return - returns 'true' if the proposed value is valid for the row and column
 	 */
 	public boolean isValidValue(int iCol, int iRow, int iValue) {
-		return false;
+		
+		if (doesElementExist(super.getRow(iRow),iValue))
+		{
+			return false;
+		}
+		if (doesElementExist(super.getColumn(iCol),iValue))
+		{
+			return false;
+		}
+		if (doesElementExist(this.getRegion(iCol, iRow),iValue))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 }

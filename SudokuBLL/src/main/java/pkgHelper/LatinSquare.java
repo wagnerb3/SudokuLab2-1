@@ -1,8 +1,11 @@
 package pkgHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
+
+import pkgEnum.ePuzzleViolation;
 
 public class LatinSquare {
 
@@ -20,6 +23,14 @@ public class LatinSquare {
 	 */
 	private boolean bIgnoreZero;
 
+	/**
+	 * PV - ArrayList to collect PuzzleViolations 
+	 * 
+	 * @version 1.2A
+	 * @since Lab #2
+	 */
+	private ArrayList<PuzzleViolation> PV = new ArrayList<PuzzleViolation>();
+	
 	/**
 	 * No-arg constructor, make it public, don't do anything in the constructor
 	 * 
@@ -75,13 +86,15 @@ public class LatinSquare {
 	public boolean isbIgnoreZero() {
 		return bIgnoreZero;
 	}
-
+	
 	/**
 	 * Should the processing ignore zeros (hasDuplicates, etc)
 	 * 
+	 * @version 1.2A
+	 * @since Lab #2
 	 * @param bIgnoreZero
 	 */
-	public void setbIgnoreZero(boolean bIgnoreZero) {
+	protected void setbIgnoreZero(boolean bIgnoreZero) {
 		this.bIgnoreZero = bIgnoreZero;
 	}
 
@@ -122,15 +135,16 @@ public class LatinSquare {
 	{
 		for (int i = 0; i < LatinSquare.length; i++) {
 			if (hasDuplicates(getRow(i)))
-				return true;
+				AddPuzzleViolation(new PuzzleViolation(ePuzzleViolation.DupRow,i));
 		}
 
 		for (int j = 0; j < LatinSquare.length; j++) {
 			if (hasDuplicates(getColumn(j)))
-				return true;
+				AddPuzzleViolation(new PuzzleViolation(ePuzzleViolation.DupCol,j));
+
 		}
 		
-		return false;
+		return (this.PV.size() > 0);
 	}
 	
 	/**
@@ -265,6 +279,8 @@ public class LatinSquare {
 	public boolean isLatinSquare() {
 
 		boolean isLatinSquare = true;
+		ClearPuzzleViolation();
+		
 		// Return 'true' if...
 		// Each row and column doesn't contain duplicates
 		// If each element in the first row is found in every other row
@@ -312,5 +328,38 @@ public class LatinSquare {
 		}
 		return false;
 
+	}
+	
+	
+	/**
+	 * getPV - Return the collection of PuzzleViolations
+	 * @version 1.2A
+	 * @since Lab #2A
+	 * @return
+	 */
+	protected ArrayList<PuzzleViolation> getPV() {
+		return PV;
+	}
+
+	/**
+	 * ClearPuzzleViolation - clear the collection of PuzzleViolations
+	 * @version 1.2A
+	 * @since Lab #2A
+	 */
+	protected void ClearPuzzleViolation()
+	{
+		PV.clear();
+	}
+	
+	/**
+	 * AddPuzzleViolation - Add a PuzzleViolation to the collection
+	 * 
+	 * @version 1.2A
+	 * @since Lab #2A
+	 * @param pv
+	 */
+	protected void AddPuzzleViolation(PuzzleViolation pv)
+	{
+		PV.add(pv);
 	}
 }
