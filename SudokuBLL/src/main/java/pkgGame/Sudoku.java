@@ -301,6 +301,14 @@ public class Sudoku extends LatinSquare {
 		}
 	}
 	
+	private void fillDiagonalRegions() 
+	{
+		for(int diag = 0; diag<this.iSize; diag+=(this.iSqrtSize+1))
+		{
+			this.setRegion(diag);
+		}
+	}
+
 	private void shuffleArray(int[] arr) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < arr.length; i++) {
