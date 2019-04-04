@@ -264,7 +264,7 @@ public class Sudoku extends LatinSquare {
 	}
 
 	public int getRegionNbr(int iCol, int iRow) {
-		return (iCol / iSqrtSize) + ((iRow / iSqrtSize) * iSqrtSize);
+		return (iRow / iSqrtSize) + ((iCol / iSqrtSize) * iSqrtSize);
 	}
 
 	public void printPuzzle() {
@@ -280,15 +280,12 @@ public class Sudoku extends LatinSquare {
 		}
 	}
 
-	private void fillDiagonalRegions() 
-	{
+	private void fillDiagonalRegions() {
 		int[] nums = new int[this.iSize];
-		for(int i = 0;i<this.iSize;i++)
-		{
-			nums[i] = i+1;
+		for (int i = 0; i < this.iSize; i++) {
+			nums[i] = i + 1;
 		}
-		for(int diag = 0; diag<this.iSize; diag+=(this.iSqrtSize+1))
-		{
+		for (int diag = 0; diag < this.iSize; diag += (this.iSqrtSize + 1)) {
 			int[] values = Arrays.copyOf(nums, this.iSize);
 			this.setRegion(diag, values);
 			this.shuffleRegion(diag);
@@ -305,20 +302,16 @@ public class Sudoku extends LatinSquare {
 
 		for (int iRow = 0; iRow < this.iSize; iRow++) {
 			for (int iCol = 0; iCol < this.iSize; iCol++) {
-				if (iRow>=i&&iCol>=j&&iRow<iMax&&iCol<jMax)
-				{
+				if (iRow >= i && iCol >= j && iRow < iMax && iCol < jMax) {
 					set[iRow][iCol] = nums[init++];
-				}
-				else
-				{
+				} else {
 					set[iRow][iCol] = this.getLatinSquare()[iRow][iCol];
 				}
 			}
 		}
 	}
-	
-	private void shuffleRegion(int r)
-	{
+
+	private void shuffleRegion(int r) {
 		int[] reg = this.getRegion(r);
 		this.shuffleArray(reg);
 		this.setRegion(r, reg);
