@@ -1,6 +1,7 @@
 package pkgGame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import pkgEnum.ePuzzleViolation;
@@ -262,11 +263,11 @@ public class Sudoku extends LatinSquare {
 		return true;
 	}
 
-	int getRegionNbr(int iCol, int iRow) {
+	public int getRegionNbr(int iCol, int iRow) {
 		return (iCol / iSqrtSize) + ((iRow / iSqrtSize) * iSqrtSize);
 	}
 
-	void printPuzzle() {
+	public void printPuzzle() {
 		for (int iRow = 0; iRow < this.iSize; iRow++) {
 			for (int iCol = 0; iCol < this.iSize; iCol++) {
 				System.out.print(this.getPuzzle()[iRow][iCol]);
@@ -279,19 +280,34 @@ public class Sudoku extends LatinSquare {
 		}
 	}
 
-	private void setRegion(int reg) {
+	private void fillDiagonalRegions() 
+	{
+		int[] nums = new int[this.iSize];
+		for(int i = 0;i<this.iSize;i++)
+		{
+			nums[i] = i+1;
+		}
+		for(int diag = 0; diag<this.iSize; diag+=(this.iSqrtSize+1))
+		{
+			int[] values = Arrays.copyOf(nums, this.iSize);
+			this.setRegion(diag, values);
+			this.shuffleRegion(diag);
+		}
+	}
+
+	private void setRegion(int reg, int[] nums) {
 		int[][] set = new int[this.iSize][this.iSize];
 		int i = (reg / iSqrtSize) * iSqrtSize;
 		int j = (reg % iSqrtSize) * iSqrtSize;
 		int jMax = j + iSqrtSize;
 		int iMax = i + iSqrtSize;
-		int init = 1;
+		int init = 0;
 
 		for (int iRow = 0; iRow < this.iSize; iRow++) {
 			for (int iCol = 0; iCol < this.iSize; iCol++) {
 				if (iRow>=i&&iCol>=j&&iRow<iMax&&iCol<jMax)
 				{
-					set[iRow][iCol] = init++;
+					set[iRow][iCol] = nums[init++];
 				}
 				else
 				{
@@ -301,12 +317,11 @@ public class Sudoku extends LatinSquare {
 		}
 	}
 	
-	private void fillDiagonalRegions() 
+	private void shuffleRegion(int r)
 	{
-		for(int diag = 0; diag<this.iSize; diag+=(this.iSqrtSize+1))
-		{
-			this.setRegion(diag);
-		}
+		int[] reg = this.getRegion(r);
+		this.shuffleArray(reg);
+		this.setRegion(r, reg);
 	}
 
 	private void shuffleArray(int[] arr) {
