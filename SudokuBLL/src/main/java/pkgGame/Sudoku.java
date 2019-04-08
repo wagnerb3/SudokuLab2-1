@@ -309,6 +309,7 @@ public class Sudoku extends LatinSquare {
 				}
 			}
 		}
+		this.setLatinSquare(set);
 	}
 
 	private void shuffleRegion(int r) {
